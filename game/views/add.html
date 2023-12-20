@@ -1,0 +1,61 @@
+<html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Accueil</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+ </head>
+ <body class="bg-teal-50 w-screen flex flex-col gap-4 justify-center py ">
+     <section class="px-8 md:px-32 mt-16 w-full flex flex-col gap-2">
+
+         <h1 class="text-3xl text-teal-900 font-bold">
+             Ajouter un <span class="text-teal-500">joueur</span>
+         </h1>
+
+         <a class="underline opacity-20" href="/">Retour</a>
+
+         <form method="POST" action="/add" 
+             class="flex flex-col gap-4 mt-4 w-full md:w-1/2 mx-auto"
+         >
+             <div class="flex flex-col gap-1">
+                 <label for="name" class="text-xl text-teal-900 font-bold">Nom</label>
+                 <input type="text" name="name" id="name" class="bg-white border border-teal-200 focus:border-teal-500 focus:outline-none px-2 py-1 rounded-lg">
+             </div>
+
+             <div class="flex flex-col gap-1">
+                 <label for="attack" class="text-xl text-teal-900 font-bold">Attaque</label>
+                 <input type="number" name="attack" id="attack" class="bg-white border border-teal-200 focus:border-teal-500 focus:outline-none px-2 py-1 rounded-lg">
+             </div>
+
+             <div class="flex flex-col gap-1">
+                <label for="attack_speed" class="text-xl text-teal-900 font-bold">Vitesse d'attaque</label>
+                <input type="number" name="attack_speed" id="attack_speed" class="bg-white border border-teal-200 focus:border-teal-500 focus:outline-none px-2 py-1 rounded-lg">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="defense" class="text-xl text-teal-900 font-bold">Defense</label>
+                <input type="number" name="defense" id="defense" class="bg-white border border-teal-200 focus:border-teal-500 focus:outline-none px-2 py-1 rounded-lg">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="life" class="text-xl text-teal-900 font-bold">Vie</label>
+                <input type="number" name="life" id="life" class="bg-white border border-teal-200 focus:border-teal-500 focus:outline-none px-2 py-1 rounded-lg">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="regeneration_speed" class="text-xl text-teal-900 font-bold">Vitesse de regeneration</label>
+                <input type="number" name="regeneration_speed" id="regeneration_speed" class="bg-white border border-teal-200 focus:border-teal-500 focus:outline-none px-2 py-1 rounded-lg">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="level" class="text-xl text-teal-900 font-bold">Niveau</label>
+                <input type="number" name="level" id="level" class="bg-white border border-teal-200 focus:border-teal-500 focus:outline-none px-2 py-1 rounded-lg">
+            </div>
+
+             <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white font-bold px-4 py-2 rounded-lg">
+                 Ajouter
+             </button>
+         </form>
+     </section>
+ </body>
+ </html>

@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-teal-50 w-screen flex flex-col gap-4 justify-center py ">
+    <section class="px-8 md:px-32 mt-16 w-full flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+            <h1 class="text-3xl text-teal-900 font-bold">
+                La liste des <span class="text-teal-500">joueurs</span>
+            </h1>
+
+            <a href="/add" class="bg-teal-500 text-white py-2 px-4 rounded">Ajouter un joueur</a>
+            <a href="/Area" class="bg-teal-500 text-white py-2 px-4 rounded">Voir les Zones Disponibles</a>
+        </div>
+
+        <div class="container mx-auto my-8">
+            <table class="min-w-full bg-white border border-teal-500">
+                <thead>
+                <tr class="bg-teal-500 text-white">
+                    <th class="py-2 px-4">Player ID</th>
+                    <th class="py-2 px-4">Nom</th>
+                    <th class="py-2 px-4">Attaque</th>
+                    <th class="py-2 px-4">Vitesse d'attaque</th>
+                    <th class="py-2 px-4">Defense</th>
+                    <th class="py-2 px-4">Vie</th>
+                    <th class="py-2 px-4">Vitesse de regeneration</th>
+                    <th class="py-2 px-4">Niveau</th>
+                    <th class="py-2 px-4">Option</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <!-- On boucle sur la variable "players" -->
+                {% for player in players_stats_list %}
+                    <tr>
+                        <!-- On affiche les données dynamiquement -->
+                        <td class="border py-2 px-4 text-center">{{ player.player_id }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_name }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_attack }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_attack_speed }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_defense }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_life }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_regeneration_speed }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_level }}</td>
+                        <td class="border py-2 px-4 text-center">
+                            <!-- On ajoute un bouton pour supprimer la donnée sur la route /delete/<id> -->
+                            <a href="/delete/{{player.player_id}}">
+                                <button class="bg-red-500 text-white py-1 px-2 rounded w-full">Delete</button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}    
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>
