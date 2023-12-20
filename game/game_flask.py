@@ -7,28 +7,25 @@ def home():
    connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
    cursor = connection.cursor()
    cursor.execute('SELECT * FROM stats')
-   players_stats = cursor.fetchall()
+   players = cursor.fetchall()
    connection.close()
 
-   players_stats_list = []
+   list_players = []
 
-   logs_file = open("logs.log", "w+")
-   for player_stat in players_stats:
-     logs_file.write(str(player_stat) + "\n")
-     players_stats_list.append({
-        "player_id":                   player_stat[0],
-        "player_name":                 player_stat[1],
-        "player_attack":               player_stat[2],
-        "player_attack_speed":         player_stat[3],
-        "player_defense":              player_stat[4],
-        "player_life":                 player_stat[5],
-        "player_regeneration_speed":   player_stat[6],
-        "player_level":                player_stat[7]
+   for player in players:
+     list_players.append({
+        "player_id":                   player[0],
+        "player_name":                 player[1],
+        "player_attack":               player[2],
+        "player_attack_speed":         player[3],
+        "player_defense":              player[4],
+        "player_life":                 player[5],
+        "player_regeneration_speed":   player[6],
+        "player_level":                player[7]
      })
-   logs_file.close()
-   return flask.render_template('index.html', players_stats_list=players_stats_list)
 
-# Faire un form pour add
+   return flask.render_template('index.html', players_stats_list=list_players)
+
 @app.route('/add', methods=['GET', 'POST'])
 def add():
    if flask.request.method == 'POST':
@@ -40,10 +37,6 @@ def add():
       parameters["life"]               = flask.request.values.get('life')
       parameters["regeneration_speed"] = flask.request.values.get('regeneration_speed')
       parameters["level"]              = flask.request.values.get('level')
-
-      logs_file = open("logs.log", "w+")
-      logs_file.write(str(parameters) + "\n")
-      logs_file.close()
 
       connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
 
@@ -57,6 +50,17 @@ def add():
    else:
       return flask.render_template('add.html')
 
+@app.route('/delete/<player_id>')
+def delete(player_id):
+   connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
+
+   cursor = connection.cursor()
+   cursor.execute('DELETE FROM stats WHERE player_id = ' + player_id)
+   connection.commit()
+   connection.close()
+
+   return flask.redirect('/')
+
 @app.route('/Area')
 def Area():
    connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
@@ -68,9 +72,6 @@ def Area():
                   GROUP BY(asp.area_source_id, asp.area_destination_id)
                   """)
    areas = cursor.fetchall()
-   logs_file = open("logs.log", "w+")
-   logs_file.write(str(areas) + "\n")
-   logs_file.close()
 
    connection.close()
    areas_list = []
@@ -88,13 +89,48 @@ def Area():
 
    return flask.render_template('Area.html')
 
-@app.route('/delete/<player_id>')
-def delete(player_id):
+@app.route('/api/players', methods=['GET'])
+def get_players():
    connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
-
    cursor = connection.cursor()
-   cursor.execute('DELETE FROM stats WHERE player_id = ' + player_id)
-   connection.commit()
+   cursor.execute('SELECT * FROM players')
+   players = cursor.fetchall()
    connection.close()
 
-   return flask.redirect('/')
+   list_players = []
+
+   for player in players:
+     list_players.append({
+        "player_id":                   player[0],
+        "player_name":                 player[1],
+        "player_attack":               player[2],
+        "player_attack_speed":         player[3],
+        "player_defense":              player[4],
+        "player_life":                 player[5],
+        "player_regeneration_speed":   player[6],
+        "player_level":                player[7]
+     })
+
+   return flask.jsonify(list_players)
+
+'''
+@app.route('/api/dogs', methods=['POST'])
+def add_dog():
+   if flask.request.method == 'POST':
+      # get data from request body
+      name = flask.request.json['name']
+      age = flask.request.json['age']
+      race = flask.request.json['race']
+
+
+      connection = sqlite3.connect('data.db')
+
+      cursor = connection.cursor()
+      cursor.execute('INSERT INTO dogs (name, age, race) VALUES ("' + name + '", "' + str(age) + '", "' + race + '")')
+      connection.commit()
+      connection.close()
+
+      return flask.jsonify({
+         "message": "Dog added successfully"
+      })
+'''
