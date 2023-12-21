@@ -11,6 +11,34 @@ def home():
 
 ## Function AND API REQUESTS Management
 
+## AUTO FORM
+@app.route('/autoform/<table_name>')
+def autoform(table_name):
+   columns = get_request("PRAGMA table_info(" + table_name + ")")
+   if columns == None:
+      return home()
+
+   columns_list = []
+   for column in columns:
+      column_info = {}
+      column_info["column_name"]      = column[1]
+      column_info["column_show_name"] = str(column[1]).replace(table_name[0:len(table_name) - 1] + "_", "").replace("_", " ").capitalize()
+      column_info["column_type"]      = column[2]
+      columns_list.append(column_info)
+   lines = select_request("* FROM " + table_name)
+
+   values_list = []
+   for line in lines:
+      value = []
+      i = 0
+      for column in columns_list:
+         print("line : " + str(line[i]))
+         value.append(line[i])
+         i += 1
+      values_list.append(str(value))
+
+   return flask.render_template('autoform.html', columns_list=columns_list, values_list=values_list)
+
 ## PLAYERS
 @app.route('/players')
 def get_players():
@@ -154,14 +182,18 @@ def commit_request(request, values=None):
 
    return selecteds
 
-def select_request(request):
+def get_request(request):
+   print("get request : " + request)
    connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
    cursor = connection.cursor()
-   cursor.execute("select " + request)
+   cursor.execute(request)
    selecteds = cursor.fetchall()
    connection.close()
 
    return selecteds
+
+def select_request(request):
+   return get_request("SELECT " + request)
 
 def get_players_list():
    return make_players_list(select_request("* FROM players"))
