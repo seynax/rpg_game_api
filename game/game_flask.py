@@ -25,19 +25,16 @@ def autoform(table_name):
       column_info["column_show_name"] = str(column[1]).replace(table_name[0:len(table_name) - 1] + "_", "").replace("_", " ").capitalize()
       column_info["column_type"]      = column[2]
       columns_list.append(column_info)
-   lines = select_request("* FROM " + table_name)
+   selecteds_lines = select_request("* FROM " + table_name)
 
-   values_list = []
-   for line in lines:
-      value = []
-      i = 0
-      for column in columns_list:
-         print("line : " + str(line[i]))
-         value.append(line[i])
-         i += 1
-      values_list.append(str(value))
+   lines_list = []
+   for selected_line in selecteds_lines:
+      line = []
+      for value in selected_line:
+         line.append(value)
+      lines_list.append(line)
 
-   return flask.render_template('autoform.html', columns_list=columns_list, values_list=values_list)
+   return flask.render_template('autoform.html', columns_list=columns_list, lines_list=lines_list)
 
 ## PLAYERS
 @app.route('/players')

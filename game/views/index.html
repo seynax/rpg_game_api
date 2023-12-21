@@ -7,14 +7,13 @@
 </head>
 <body class="bg-teal-50 w-screen flex flex-col gap-4 justify-center py ">
     <section class="px-8 md:px-32 mt-16 w-full flex flex-col gap-2">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-center items-center">
             <h1 class="text-3xl text-teal-900 font-bold">
                 La liste des <span class="text-teal-500">joueurs</span>
             </h1>
-
-
             <a href="/areas" class="bg-teal-500 text-white py-2 px-4 rounded">Voir les Zones Disponibles</a>
         </div>
+    </div>
 
         <div class="container mx-auto my-8">
             <table class="min-w-full bg-white border border-teal-500">
@@ -29,8 +28,11 @@
                     <th class="py-2 px-4">Vie</th>
                     <th class="py-2 px-4">Vitesse de regeneration</th>
                     <th class="py-2 px-4">Niveau</th>
-                    <th class="py-2 px-4">Option</th>
-                    <th class="py-2 px-4"><a href="/player/add" class="bg-red-500 text-white py-2 px-4 rounded">+</a></th>
+                    <th class="py-2 px-4">
+                        <a href="/player/add">
+                            <button class="bg-green-500 text-white py-1 px-2 rounded w-full">+</button>
+                        </a>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>

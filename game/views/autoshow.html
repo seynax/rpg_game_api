@@ -23,12 +23,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {% for column in columns_list %}
+                    {% for line in lines_list %}
                         <tr>
-                            {% for line in values_list %}
                             {% for value in line %}
                                     <td class="border py-2 px-4 text-center">{{ value }}</td>
-                            {% endfor %}
                             {% endfor %}
                         </tr>
                     {% endfor %}
