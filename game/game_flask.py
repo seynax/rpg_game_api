@@ -154,8 +154,8 @@ def insert_player(player):
    if player == None:
       return False
 
-   ##if 'zone_active' not in player:
-   player["zone_active"]        = 1 ## Make zone active text box in form
+   if player["zone_active"] == None:
+      player["zone_active"]        = 1 ## Make zone active text box in form
    commit_request("""
                      INSERT INTO players( player_name, player_zone_active, player_attack, player_attack_speed, player_defense, player_life,  player_regeneration_speed,  player_level)
                                  VALUES (:name,       :zone_active,       :attack,       :attack_speed,       :defense,              :life, :regeneration_speed,        :level)
@@ -171,12 +171,13 @@ def make_players_list(players):
       players_list.append({
          "player_id":                   player[0],
          "player_name":                 player[1],
-         "player_attack":               player[2],
-         "player_attack_speed":         player[3],
-         "player_defense":              player[4],
-         "player_life":                 player[5],
-         "player_regeneration_speed":   player[6],
-         "player_level":                player[7]
+         "player_zone_active":          player[2],
+         "player_attack":               player[3],
+         "player_attack_speed":         player[4],
+         "player_defense":              player[5],
+         "player_life":                 player[6],
+         "player_regeneration_speed":   player[7],
+         "player_level":                player[8]
       })
    return players_list
 

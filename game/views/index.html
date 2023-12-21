@@ -22,6 +22,7 @@
                 <tr class="bg-teal-500 text-white">
                     <th class="py-2 px-4">Player ID</th>
                     <th class="py-2 px-4">Nom</th>
+                    <th class="py-2 px-4">Zone active</th>
                     <th class="py-2 px-4">Attaque</th>
                     <th class="py-2 px-4">Vitesse d'attaque</th>
                     <th class="py-2 px-4">Defense</th>
@@ -39,6 +40,7 @@
                         <!-- On affiche les données dynamiquement -->
                         <td class="border py-2 px-4 text-center">{{ player.player_id }}</td>
                         <td class="border py-2 px-4 text-center">{{ player.player_name }}</td>
+                        <td class="border py-2 px-4 text-center">{{ player.player_zone_active }}</td>
                         <td class="border py-2 px-4 text-center">{{ player.player_attack }}</td>
                         <td class="border py-2 px-4 text-center">{{ player.player_attack_speed }}</td>
                         <td class="border py-2 px-4 text-center">{{ player.player_defense }}</td>
