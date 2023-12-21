@@ -6,7 +6,7 @@ app = flask.Flask(__name__, template_folder="views")
 def home():
    connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
    cursor = connection.cursor()
-   cursor.execute('SELECT * FROM stats')
+   cursor.execute('SELECT * FROM players')
    players = cursor.fetchall()
    connection.close()
 
