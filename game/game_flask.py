@@ -32,7 +32,7 @@ def add_player():
 
 @app.route('/delete/player/<player_id>')
 def delete_player(player_id):
-   commit_request("DELETE FROM players WHERE player_id = " + str(player_id))
+   db_delete_player(player_id)
 
    return flask.redirect('/')
 
@@ -54,13 +54,13 @@ def api_add_players():
    player = get_json_array_values(["name", "zone_active", "attack", "attack_speed", "defense", "life", "regeneration_speed", "level"])
    return json_success_message("Players added") if insert_players(player) else json_failed_message("Players add")
 
-@app.route('/api/delete/player/')
+@app.route('/api/delete/player', methods=['POST'])
 def api_delete_player():
-   return json_failed_message("Player deletion not supported")
+   return json_success_message("Player deleted") if delete_player(get_json_value("player_id")) else json_failed_message("Player deletion")
 
-@app.route('/api/delete/players/')
+@app.route('/api/delete/players', methods=['POST'])
 def api_delete_players():
-   return json_failed_message("Players deletion not supported")
+   return json_success_message("Players deleted") if db_delete_players(get_json_array_value( ["player_id"])) else json_failed_message("Players deletion")
 
 ## AREAS
 @app.route('/areas')
@@ -72,6 +72,11 @@ def get_areas():
    return flask.jsonify(get_areas_and_path_list())
 
 ## JSON UTILS METHODS
+def json_message(text):
+   return flask.jsonify({
+      "message": text
+   })
+
 def json_failed_message(text):
    return flask.jsonify({
       "message": text + " failed"
@@ -87,29 +92,52 @@ def json_success_message(text):
 def get_form_values(values_names):
    if flask.request.method != 'POST':
       return None
+
    values = {}
    for value_name in values_names:
       values[value_name] = flask.request.values.get(value_name)
+
+   return values
+
+def get_json_value(value_name):
+   if flask.request.method != 'POST':
+      return None
+
+   return flask.request.json[value_name]
+
+def get_json_array_value(values_names):
+   if flask.request.method != 'POST':
+      return None
+
+   values = []
+   for json_value in flask.request.json:
+      for value_name in values_names:
+         values.append(json_value[value_name])
+
    return values
 
 def get_json_values(values_names):
    if flask.request.method != 'POST':
       return None
+
    values = {}
    for value_name in values_names:
       values[value_name] = flask.request.json[value_name]
+
    return values
 
 def get_json_array_values(values_names):
    if flask.request.method != 'POST':
       return None
-   players = []
-   for json_player in flask.request.json:
-      player = {}
+
+   values = []
+   for json_value in flask.request.json:
+      value = {}
       for value_name in values_names:
-         player[value_name] = json_player[value_name]
-      players.append(player)
-   return players
+         value[value_name] = json_value[value_name]
+      values.append(value)
+
+   return values
 
 ## DATABASE UTILS METHODS
 
@@ -160,6 +188,23 @@ def insert_player(player):
                      INSERT INTO players( player_name, player_zone_active, player_attack, player_attack_speed, player_defense, player_life,  player_regeneration_speed,  player_level)
                                  VALUES (:name,       :zone_active,       :attack,       :attack_speed,       :defense,              :life, :regeneration_speed,        :level)
                      """, player)
+   return True
+
+def db_delete_player(player_id):
+   if player_id == None:
+      return False
+
+   commit_request("DELETE FROM players WHERE player_id = " + str(player_id))
+
+   return True
+
+def db_delete_players(players_id):
+   if players_id == None:
+      return False
+
+   for player_id in players_id:
+      delete_player(player_id)
+
    return True
 
 def make_players_list(players):
