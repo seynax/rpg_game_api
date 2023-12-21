@@ -12,9 +12,64 @@ def home():
 ## Function AND API REQUESTS Management
 
 ## AUTO FORM
-@app.route('/autoshow/<table_name>')
+
+@app.route('/autoform/<table_name>', methods=['GET'])
 def autoform(table_name):
-   columns = get_request("PRAGMA table_info(" + table_name + ")")
+   columns = get_columns(table_name)
+   if columns == None:
+      return home()
+
+   columns_list = []
+   i = 0
+   for column in columns:
+      if i == 0 and str(column[1]).endswith("_id"):
+         continue
+
+      column_info = {}
+      column_info["column_name"]      = column[1]
+      column_info["column_show_name"] = str(column[1]).replace(table_name[0:len(table_name) - 1] + "_", "").replace("_", " ").capitalize()
+      column_info["column_type"]      = column[2]
+      columns_list.append(column_info)
+      i += 1
+
+   return flask.render_template('autoform.html', table_name=table_name, columns_list=columns_list)
+
+@app.route('/autoadd/<table_name>', methods=['POST'])
+def autoadd(table_name):
+   columns = get_columns(table_name)
+   if columns == None:
+      return home()
+
+   request = "INSERT INTO " + table_name + "("
+   i = 0
+   values_request = ""
+   values = {}
+   for key, value in flask.request.values.items():
+      values[key] = value
+      if i > 0:
+         request += ", "
+         values_request += ", "
+      request += key
+      values_request += ":" + key
+      i += 1
+   request += ") VALUES(" + values_request + ")"
+   commit_request(request, values)
+
+   return autoshow(table_name)
+
+@app.route('/autoremove/<table_name>/<element_id>')
+def autoremove(table_name, element_id):
+   columns = get_columns(table_name)
+   if columns == None:
+      return home()
+
+   commit_request("DELETE FROM " + table_name + " WHERE " + columns[0][1] + " = " + str(element_id))
+
+   return autoshow(table_name)
+
+@app.route('/autoshow/<table_name>')
+def autoshow(table_name):
+   columns = get_columns(table_name)
    if columns == None:
       return home()
 
@@ -34,7 +89,7 @@ def autoform(table_name):
          line.append(value)
       lines_list.append(line)
 
-   return flask.render_template('autoshow.html', columns_list=columns_list, lines_list=lines_list)
+   return flask.render_template('autoshow.html', table_name=table_name, columns_list=columns_list, lines_list=lines_list)
 
 ## PLAYERS
 @app.route('/players')
@@ -179,8 +234,13 @@ def commit_request(request, values=None):
 
    return selecteds
 
+def get_columns(table_name):
+   try:
+      return get_request("PRAGMA table_info(" + table_name + ")")
+   except sqlite3.OperationalError:
+      return None
+
 def get_request(request):
-   print("get request : " + request)
    connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
    cursor = connection.cursor()
    cursor.execute(request)

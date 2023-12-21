@@ -9,7 +9,7 @@
     <section class="px-8 md:px-32 mt-16 w-full flex flex-col gap-2">
         <div class="flex justify-between items-center">
             <h1 class="text-3xl text-teal-900 font-bold">
-                La liste des <span class="text-teal-500">joueurs</span>
+                La liste des <span class="text-teal-500">{{ table_name }}</span>
             </h1>
         </div>
 
@@ -20,6 +20,11 @@
                     {% for column in columns_list %}
                         <th class="py-2 px-4">{{ column.column_show_name }}</th>
                     {% endfor %}
+                    <td class="border py-2 px-4 text-center">
+                        <a href="/autoform/{{ table_name }}">
+                            <button class="bg-green-500 text-white py-1 px-2 rounded w-full">+</button>
+                        </a>
+                    </td>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,6 +33,11 @@
                             {% for value in line %}
                                     <td class="border py-2 px-4 text-center">{{ value }}</td>
                             {% endfor %}
+                            <td class="border py-2 px-4 text-center">
+                                <a href="/autoremove/{{ table_name }}/{{ line[0] }}">
+                                    <button class="bg-red-500 text-white py-1 px-2 rounded w-full">Delete</button>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
