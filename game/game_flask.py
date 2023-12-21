@@ -12,7 +12,7 @@ def home():
 ## Function AND API REQUESTS Management
 
 ## AUTO FORM
-@app.route('/autoform/<table_name>')
+@app.route('/autoshow/<table_name>')
 def autoform(table_name):
    columns = get_request("PRAGMA table_info(" + table_name + ")")
    if columns == None:
@@ -34,7 +34,7 @@ def autoform(table_name):
          line.append(value)
       lines_list.append(line)
 
-   return flask.render_template('autoform.html', columns_list=columns_list, lines_list=lines_list)
+   return flask.render_template('autoshow.html', columns_list=columns_list, lines_list=lines_list)
 
 ## PLAYERS
 @app.route('/players')
