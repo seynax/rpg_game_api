@@ -41,7 +41,7 @@ def add():
       connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
 
       cursor = connection.cursor()
-      cursor.execute('INSERT INTO stats (player_name, player_attack, player_attack_speed, player_defense, player_life, player_regeneration_speed, player_level) VALUES(:name, :attack, :attack_speed, :defense, :life, :regeneration_speed, :level)',
+      cursor.execute('INSERT INTO players (player_name, player_attack, player_attack_speed, player_defense, player_life, player_regeneration_speed, player_level) VALUES(:name, :attack, :attack_speed, :defense, :life, :regeneration_speed, :level)',
                      parameters)
       connection.commit()
       connection.close()
@@ -55,7 +55,7 @@ def delete(player_id):
    connection = sqlite3.connect('../resources/SQLITE/rpg_game.db')
 
    cursor = connection.cursor()
-   cursor.execute('DELETE FROM stats WHERE player_id = ' + player_id)
+   cursor.execute('DELETE FROM players WHERE player_id = ' + player_id)
    connection.commit()
    connection.close()
 
