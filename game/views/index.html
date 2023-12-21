@@ -12,8 +12,8 @@
                 La liste des <span class="text-teal-500">joueurs</span>
             </h1>
 
-            <a href="/add" class="bg-teal-500 text-white py-2 px-4 rounded">Ajouter un joueur</a>
-            <a href="/Area" class="bg-teal-500 text-white py-2 px-4 rounded">Voir les Zones Disponibles</a>
+            <a href="/player/add" class="bg-teal-500 text-white py-2 px-4 rounded">Ajouter un joueur</a>
+            <a href="/areas" class="bg-teal-500 text-white py-2 px-4 rounded">Voir les Zones Disponibles</a>
         </div>
 
         <div class="container mx-auto my-8">
@@ -47,7 +47,7 @@
                         <td class="border py-2 px-4 text-center">{{ player.player_level }}</td>
                         <td class="border py-2 px-4 text-center">
                             <!-- On ajoute un bouton pour supprimer la donnée sur la route /delete/<id> -->
-                            <a href="/delete/{{player.player_id}}">
+                            <a href="/delete/player/{{player.player_id}}">
                                 <button class="bg-red-500 text-white py-1 px-2 rounded w-full">Delete</button>
                             </a>
                         </td>
