@@ -11,7 +11,7 @@ def home():
 
 ## Function AND API REQUESTS Management
 
-## AUTO FORM
+## AUTO FORM, ADD, DELETE AND SHOW
 
 @app.route('/autoform/<table_name>', methods=['GET'])
 def autoform(table_name):
@@ -57,8 +57,8 @@ def autoadd(table_name):
 
    return autoshow(table_name)
 
-@app.route('/autoremove/<table_name>/<element_id>')
-def autoremove(table_name, element_id):
+@app.route('/autodelete/<table_name>/<element_id>')
+def autodelete(table_name, element_id):
    columns = get_columns(table_name)
    if columns == None:
       return home()
@@ -66,6 +66,31 @@ def autoremove(table_name, element_id):
    commit_request("DELETE FROM " + table_name + " WHERE " + columns[0][1] + " = " + str(element_id))
 
    return autoshow(table_name)
+
+@app.route('/autoget/<table_name>/<element_id>')
+def autoget(table_name, element_id):
+   columns = get_columns(table_name)
+   if columns == None:
+      return home()
+
+   columns_list = []
+   for column in columns:
+      column_info = {}
+      column_info["column_name"]      = column[1]
+      column_info["column_show_name"] = str(column[1]).replace(table_name[0:len(table_name) - 1] + "_", "").replace("_", " ").capitalize()
+      column_info["column_type"]      = column[2]
+      columns_list.append(column_info)
+
+   selecteds_lines = select_request("* FROM " + table_name + " WHERE " + columns[0][1] + " = " + str(element_id))
+
+   lines_list = []
+   for selected_line in selecteds_lines:
+      line = []
+      for value in selected_line:
+         line.append(value)
+      lines_list.append(line)
+
+   return flask.render_template('autoshow.html', table_name=table_name, columns_list=columns_list, lines_list=lines_list)
 
 @app.route('/autoshow/<table_name>')
 def autoshow(table_name):
